@@ -1,0 +1,20 @@
+create table graph(graph_id integer PRIMARY KEY, lifespan time);
+create table node(graph_id int , node_id integer PRIMARY KEY,execution_time time, indegree integer , constraint fk_graph_id FOREIGN KEY(graph_id) REFERENCES graph(graph_id));
+create table edge(edge_id int PRIMARY KEY,from_node integer references node(node_id) , to_node integer references node(node_id) , graph_id integer references graph(graph_id));
+create table execution(exec_id integer PRIMARY KEY , graph_id integer references graph(graph_id),status varchar(30) , start_time time); 
+create table task(task_id integer PRIMARY KEY,node_id integer references node(node_id) , edge_id integer references edge(edge_id) , current_dependency integer , status varchar(20)); 
+
+
+--------------------------- new schema------------------------------------------------
+create table graph(graph_id integer PRIMARY KEY, lifespan time);
+create table node(graph_id integer REFERENCES graph(graph_id), node_id integer PRIMARY KEY , node integer ,execution_time time , indegree integer );
+create table edge(edge_id integer PRIMARY KEY, from_node integer REFERENCES node(node_id),to_node integer REFERENCES node(node_id),graph_id integer REFERENCES graph(graph_id));
+create table execution(exec_id integer PRIMARY KEY , graph_id integer REFERENCES graph(graph_id) , status varchar(30),start_time timestamp);
+create table task(task_id integer PRIMARY KEY , node_id integer REFERENCES node(node_id),exec_id integer REFERENCES execution(exec_id),current_dependency integer , status varchar(20));
+
+--------------------------- new schema by hemant ---------------------------------------
+create table graph(graph_id serial PRIMARY KEY , lifespan timestamp);
+create table node(graph_id integer REFERENCES graph(graph_id), node_id serial PRIMARY KEY , node integer not null,execution_time time , indegree integer not null);
+create table edge(edge_id serial PRIMARY KEY , from_node integer REFERENCES node(node_id), to_node integer REFERENCES node(node_id), graph_id integer REFERENCES graph(graph_id));
+create table execution(exec_id serial PRIMARY KEY, graph_id integer REFERENCES graph(graph_id) , status varchar(30), start_time timestamp);
+create table task(task_id serial PRIMARY KEY, node_id integer REFERENCES node(node_id), exec_id integer REFERENCES execution(exec_id), current_dependency integer not null, status varchar(20));
